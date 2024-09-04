@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MauiApp1"
+             x:Class="MauiApp1.MainPage">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <HorizontalStackLayout Padding="20" Spacing="15">
+            <Button Text="Save"/>
+            <Button Text="Save as"/>
+        </HorizontalStackLayout>
+        <Editor AutoSize="TextChanges" x:Name="MarkdownEditor" TextChanged="OnChange"/>
+        <WebView HorizontalOptions="Fill">
+            <WebView.Source>
+                <HtmlWebViewSource x:Name="MarkdownView">
+                </HtmlWebViewSource>
+            </WebView.Source>
+        </WebView>
+        <local:MarkdownCanvas x:Name="Canvas" Text=""/>
+    </VerticalStackLayout>
+
+</ContentPage>
