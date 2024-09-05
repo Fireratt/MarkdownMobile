@@ -5,7 +5,7 @@
              x:Class="MauiApp1.MainPage">
     <VerticalStackLayout Padding="20" Spacing="15">
         <HorizontalStackLayout Padding="20" Spacing="15">
-            <Button Text="Save"/>
+            <Button Text="Save" Clicked="OnSave"/>
             <Button Text="Save as"/>
         </HorizontalStackLayout>
         <Editor AutoSize="TextChanges" x:Name="MarkdownEditor" TextChanged="OnChange"/>

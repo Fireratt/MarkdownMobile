@@ -6,10 +6,14 @@
     xmlns:local="clr-namespace:MauiApp1"
     Shell.FlyoutBehavior="Disabled"
     Title="MauiApp1">
-
-    <ShellContent
-        Title="Home"
+    <Tab >
+        <ShellContent
+        Title="编辑器"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
-
+        <ShellContent
+        Title="文件"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="FilePage" />
+    </Tab>
 </Shell>

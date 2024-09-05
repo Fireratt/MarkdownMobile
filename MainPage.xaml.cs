@@ -1,6 +1,5 @@
 ﻿
 using Markdig;
-
 namespace MauiApp1
 {
     public partial class MainPage : ContentPage
@@ -22,14 +21,23 @@ namespace MauiApp1
             MarkdownView.Html = Read(); 
         }
 
-        public void onSave()
+        public async void OnSave(object sender, EventArgs e)
+        {
+            if (await FileManager.SaveFile(Canvas.Text))
+            {
+                this.DisplayAlert("", "save success" , "OK");
+            }
+            else
+            {
+                this.DisplayAlert("", "save stopped due to unknowned problem", "OK");
+
+            }
+        }
+        public void onSaveAs(object sender, TextChangedEventArgs e)
         {
 
         }
-        public void onSaveAs()
-        {
 
-        }
     }
     
 
