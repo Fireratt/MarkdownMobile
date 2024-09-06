@@ -6,18 +6,20 @@ namespace MauiApp1
 {
 	public class FileManager
 	{
-		public FileManager()
+        public const string ROOT_DIR = "/data/data/com.Firerat.mauiapp1";
+		public const string DOCUMENT_DIR = "/Document";
+        public FileManager()
 		{
 		}
-		public static async Task<bool> SaveFile(String content)
+		public static async Task<bool> SaveFile(String content , String fileName)
 		{
-			var saveFileResult = await FilePicker.PickAsync(new PickOptions
+            if (!Directory.Exists(ROOT_DIR + DOCUMENT_DIR))
+            {
+                Directory.CreateDirectory(ROOT_DIR + DOCUMENT_DIR);   // 若存放所有markdown文档的文件夹不存在，则先创建一个。
+            }
+            if (fileName != null && fileName != "")
 			{
-				PickerTitle = "Save as New File"
-            });
-			if (saveFileResult != null)
-			{
-				var filePath = saveFileResult.FullPath;
+				var filePath = ROOT_DIR + DOCUMENT_DIR + "/" +  fileName + ".md"; 
 				Console.WriteLine(filePath); 
 				File.WriteAllText(filePath, content);
 				return true; 

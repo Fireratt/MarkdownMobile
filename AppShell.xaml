@@ -13,7 +13,7 @@
         Route="MainPage" />
         <ShellContent
         Title="文件"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        ContentTemplate="{DataTemplate local:FilePage}"
         Route="FilePage" />
     </Tab>
 </Shell>

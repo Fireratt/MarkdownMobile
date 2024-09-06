@@ -23,7 +23,14 @@ namespace MauiApp1
 
         public async void OnSave(object sender, EventArgs e)
         {
-            if (await FileManager.SaveFile(Canvas.Text))
+            string fileName = await this.DisplayPromptAsync("SaveFile", "请输入保存文件名");
+            Console.WriteLine(fileName); 
+            if(fileName == "(null)" || fileName == "" || fileName == null || fileName.Equals("(null)"))
+            {
+                this.DisplayAlert("", "save stopped due to use input error", "OK");
+                return; 
+            }
+            if (await FileManager.SaveFile(Canvas.Text , fileName))
             {
                 this.DisplayAlert("", "save success" , "OK");
             }
