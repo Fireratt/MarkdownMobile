@@ -2,7 +2,7 @@
 using Markdig;
 namespace MauiApp1
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : ContentPage , IQueryAttributable
     {
         int count = 0;
         public MainPage()
@@ -25,7 +25,7 @@ namespace MauiApp1
         {
             string fileName = await this.DisplayPromptAsync("SaveFile", "请输入保存文件名");
             Console.WriteLine(fileName); 
-            if(fileName == "(null)" || fileName == "" || fileName == null || fileName.Equals("(null)"))
+            if(fileName == "" || fileName == null)
             {
                 this.DisplayAlert("", "save stopped due to use input error", "OK");
                 return; 
@@ -44,7 +44,14 @@ namespace MauiApp1
         {
 
         }
+        public async void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            if (query.TryGetValue("filename", out object filename)) // receive the filename from filepage
+            {
+                MarkdownEditor.Text = await FileManager.ReadFile(filename as string);
 
+            }
+        }
     }
     
 

@@ -11,7 +11,7 @@ namespace MauiApp1
         public FileManager()
 		{
 		}
-		public static async Task<bool> SaveFile(String content , String fileName)
+		public static async Task<bool> SaveFile(string content , string fileName)
 		{
             if (!Directory.Exists(ROOT_DIR + DOCUMENT_DIR))
             {
@@ -29,6 +29,22 @@ namespace MauiApp1
 				return false; 
             }
 		}
-
+		public static async Task<string> ReadFile(string fileName)
+		{
+			string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
+			string result = ""; 
+			try 
+			{ 
+				using (StreamReader reader = new StreamReader(fullname))
+				{
+					result = reader.ReadToEnd(); 
+				}
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e.ToString()); 
+			}
+			return result; 
+		}
 	}
 }

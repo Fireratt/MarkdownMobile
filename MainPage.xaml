@@ -8,14 +8,15 @@
             <Button Text="Save" Clicked="OnSave"/>
             <Button Text="Save as"/>
         </HorizontalStackLayout>
-        <Editor AutoSize="TextChanges" x:Name="MarkdownEditor" TextChanged="OnChange"/>
+        
+            <Editor AutoSize="TextChanges" x:Name="MarkdownEditor" TextChanged="OnChange"/>
         <WebView HorizontalOptions="Fill">
             <WebView.Source>
                 <HtmlWebViewSource x:Name="MarkdownView">
                 </HtmlWebViewSource>
             </WebView.Source>
         </WebView>
-        <local:MarkdownCanvas x:Name="Canvas" Text=""/>
+        <local:MarkdownCanvas x:Name="Canvas" Text="AAA"/>
     </VerticalStackLayout>
 
 </ContentPage>

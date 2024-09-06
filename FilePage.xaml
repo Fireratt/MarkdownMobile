@@ -4,12 +4,11 @@
              xmlns:local="clr-namespace:MauiApp1"
              x:Class="MauiApp1.FilePage">
 	<VerticalStackLayout Padding="20" Spacing="15">
-			<CollectionView ItemsSource="{Binding YourCollection}">
+		<Button Text ="刷新" Clicked="OnRefresh"/>
+			<CollectionView ItemsSource="{Binding YourCollection}" x:Name="FileCollection">
 				<CollectionView.ItemTemplate>
 					<DataTemplate>
-						<StackLayout Padding="10">
-							<Label Text="{Binding Name}" FontSize="20" />
-						</StackLayout>
+						<local:FileUnit Text="{Binding Name}"/>
 					</DataTemplate>
 				</CollectionView.ItemTemplate>
 			</CollectionView>

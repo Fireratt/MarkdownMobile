@@ -5,7 +5,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.ComponentModel;
+using System.Xml.Linq;
 namespace MauiApp1
 {
     public partial class FilePage : ContentPage
@@ -39,6 +40,15 @@ namespace MauiApp1
                 fileDatas[cnt] = new FileData{ Name = file.Name } ;
                 cnt++; 
             }
+            if(YourCollection!=null)
+            {
+                YourCollection.Clear();
+                foreach (var item in fileDatas)
+                {
+                    YourCollection.Add(item);
+                }
+                return; 
+            }
             YourCollection = new ObservableCollection<FileData>(fileDatas);
             BindingContext = this;
         }
@@ -47,9 +57,30 @@ namespace MauiApp1
             InitializeComponent();
             InitializeDocuments(); 
         }
+        public void OnRefresh(object sender, EventArgs e)
+        {
+            InitializeDocuments(); 
+        }
     }
-    public class FileData
+    public class FileData : INotifyPropertyChanged  
     {
-        public string Name { get; set; }
+        private string _name; 
+        public string Name
+        {
+            get => _name; set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
