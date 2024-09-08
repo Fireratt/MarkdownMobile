@@ -46,5 +46,16 @@ namespace MauiApp1
 			}
 			return result; 
 		}
-	}
+
+		public static async void ShareFile(string fileName)
+		{
+            string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
+			await Share.Default.RequestAsync(new ShareFileRequest
+			{
+				File = new ShareFile(fullname) , 
+				Title = "Share Your markdown file" 
+			}); 
+
+        }
+    }
 }

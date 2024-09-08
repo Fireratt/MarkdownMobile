@@ -12,6 +12,7 @@ namespace MauiApp1
         private Label name; 
         private Button deleteButton;
         private Button openButton;
+        private Button shareButton; 
         private static void OnPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
 
@@ -47,9 +48,15 @@ namespace MauiApp1
             {
                 Text = "打开"
             };
+            shareButton = new Button
+            {
+                Text = "分享"
+            };
             Add(name);
             Add(deleteButton);
+            Add(shareButton); 
             openButton.Clicked += onOpen;   // bind the function for button
+            shareButton.Clicked += onShare; 
             Add(openButton);
             Padding = 10;
             Margin = 24; 
@@ -58,6 +65,11 @@ namespace MauiApp1
         {
             var shell = Shell.Current;
             shell.GoToAsync($"//MainPage?filename={Text}"); 
+        }
+
+        public void onShare(object sender , EventArgs e)
+        {
+            FileManager.ShareFile(Text); 
         }
     }
 }
