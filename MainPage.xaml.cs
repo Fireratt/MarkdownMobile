@@ -5,9 +5,24 @@ namespace MauiApp1
     public partial class MainPage : ContentPage , IQueryAttributable
     {
         int count = 0;
+        readonly string[] fastInputs = { "`", "```", "#", "$", "^", "_", "*" };
+
         public MainPage()
         {
             InitializeComponent();
+            InitializeFastInputs(); 
+        }
+        private void InitializeFastInputs()
+        {
+            foreach (string i in fastInputs)
+            {
+                var button = new FastInputButton(this, i);
+                MainButtons.Add(button); 
+            }
+        }
+        public void Input(string append)    // append a string in the text ; it will be used in the FastInput
+        {
+            MarkdownEditor.Text += append; 
         }
         public String Read()    // transform the markdown to html
         {
