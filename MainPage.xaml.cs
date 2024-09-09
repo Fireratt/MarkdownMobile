@@ -13,12 +13,11 @@ namespace MauiApp1
         {
             var mdPipeLine = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 
-            return Markdig.Markdown.ToHtml(Canvas.Text , mdPipeLine); 
+            return Markdig.Markdown.ToHtml(MarkdownEditor.Text , mdPipeLine); 
         }
         public void OnChange(object sender, TextChangedEventArgs e)
         {
-            Canvas.Text = MarkdownEditor.Text;
-            MarkdownView.Html = Read(); 
+            MarkdownView.Html = Read();
         }
 
         public async void OnSave(object sender, EventArgs e)
@@ -30,7 +29,7 @@ namespace MauiApp1
                 this.DisplayAlert("", "save stopped due to use input error", "OK");
                 return; 
             }
-            if (await FileManager.SaveFile(Canvas.Text , fileName))
+            if (await FileManager.SaveFile(MarkdownEditor.Text , fileName))
             {
                 this.DisplayAlert("", "save success" , "OK");
             }

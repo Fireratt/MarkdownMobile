@@ -3,20 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MauiApp1"
              x:Class="MauiApp1.MainPage">
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <HorizontalStackLayout Padding="20" Spacing="15">
-            <Button Text="Save" Clicked="OnSave"/>
-            <Button Text="Save as"/>
-        </HorizontalStackLayout>
-        
-            <Editor AutoSize="TextChanges" x:Name="MarkdownEditor" TextChanged="OnChange"/>
-        <WebView HorizontalOptions="Fill">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+            <RowDefinition Height="*"/>
+            <!-- Editor -->
+            <RowDefinition Height="460"/>
+            <!-- WebView with fixed height -->
+        </Grid.RowDefinitions>
+        <WebView Grid.Row="2" VerticalOptions="FillAndExpand" >
             <WebView.Source>
                 <HtmlWebViewSource x:Name="MarkdownView">
                 </HtmlWebViewSource>
             </WebView.Source>
         </WebView>
-        <local:MarkdownCanvas x:Name="Canvas" Text="AAA"/>
-    </VerticalStackLayout>
+        <HorizontalStackLayout Grid.Row="0" Padding="20" Spacing="15" >
+            <Button Text="Save" Clicked="OnSave"/>
+            <Button Text="Save as"/>
+        </HorizontalStackLayout>
 
+        <Editor x:Name="MarkdownEditor" TextChanged="OnChange" Grid.Row="1" />
+
+    </Grid>
 </ContentPage>
