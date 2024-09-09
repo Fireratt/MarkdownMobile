@@ -56,7 +56,8 @@ namespace MauiApp1
             Add(deleteButton);
             Add(shareButton); 
             openButton.Clicked += onOpen;   // bind the function for button
-            shareButton.Clicked += onShare; 
+            shareButton.Clicked += onShare;
+            deleteButton.Clicked += onDelete; 
             Add(openButton);
             Padding = 10;
             Margin = 24; 
@@ -70,6 +71,14 @@ namespace MauiApp1
         public void onShare(object sender , EventArgs e)
         {
             FileManager.ShareFile(Text); 
+        }
+        public void onDelete(object sender, EventArgs e)
+        {
+            if (FileManager.DeleteFile(Text))
+            {
+                this.IsVisible = false; 
+            }
+
         }
     }
 }

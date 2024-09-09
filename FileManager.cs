@@ -57,5 +57,21 @@ namespace MauiApp1
 			}); 
 
         }
+
+		public static bool DeleteFile(string fileName)
+		{
+            string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
+			try
+			{
+                File.Delete(fullname);
+
+            }
+			catch(Exception e)
+			{
+				Console.WriteLine(e.ToString());
+				return false; 
+			}
+			return true; 
+        }
     }
 }
