@@ -22,7 +22,17 @@ namespace MauiApp1
         }
         public void Input(string append)    // append a string in the text ; it will be used in the FastInput
         {
-            MarkdownEditor.Text += append; 
+            if (MarkdownEditor.Text == null)
+            {
+                MarkdownEditor.Text = ""; 
+            }
+            Console.WriteLine(MarkdownEditor.CursorPosition);
+            int originalCursor = MarkdownEditor.CursorPosition; 
+            MarkdownEditor.Text = MarkdownEditor.Text.Insert(MarkdownEditor.CursorPosition, append);
+            // Set the cursor the the position write behind the append
+            MarkdownEditor.CursorPosition = originalCursor + append.Length; 
+            Console.WriteLine(MarkdownEditor.CursorPosition);
+
         }
         public String Read()    // transform the markdown to html
         {
