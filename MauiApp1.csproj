@@ -62,6 +62,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AppSoftware.KatexSharpRunner" Version="0.1.0" />
+		<PackageReference Include="Jint" Version="2.11.58" />
 		<PackageReference Include="Markdig" Version="0.37.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
@@ -74,5 +76,7 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionMauiApp1HideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -1,5 +1,8 @@
 ﻿
 using Markdig;
+using System.Diagnostics.Metrics;
+using System.Text.Unicode;
+using System.Xml.Linq;
 namespace MauiApp1
 {
     public partial class MainPage : ContentPage , IQueryAttributable
@@ -33,16 +36,27 @@ namespace MauiApp1
             MarkdownEditor.CursorPosition = originalCursor + append.Length; 
             Console.WriteLine(MarkdownEditor.CursorPosition);
 
+
         }
         public String Read()    // transform the markdown to html
         {
-            var mdPipeLine = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-
+            var mdPipeLine = new MarkdownPipelineBuilder().UseMathematics().UseAutoLinks().Build();
+            Console.WriteLine(Markdig.Markdown.ToHtml(MarkdownEditor.Text, mdPipeLine)); 
             return Markdig.Markdown.ToHtml(MarkdownEditor.Text , mdPipeLine); 
         }
         public void OnChange(object sender, TextChangedEventArgs e)
         {
-            MarkdownView.Html = Read();
+            string result = Read(); 
+            Console.WriteLine(result);
+            string header = "    <meta charset=\"UTF-8\">" + 
+    "<meta name = \"viewport\" content = \"width=device-width, initial-scale=1.0\">\n" + 
+    "<link rel = \"stylesheet\" href = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css\">\n" + 
+    "<script defer src = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js\"></script>\n" + 
+    "<script defer src = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js\"" + 
+        "onload = \"renderMathInElement(document.body);\"></script>" 
+            ;
+            MarkdownView.Html = $"<!DOCTYPE html><html><head>{header}</head><body><div class=\"results\">{result}</div></body></html>";
+
         }
 
         public async void OnSave(object sender, EventArgs e)
