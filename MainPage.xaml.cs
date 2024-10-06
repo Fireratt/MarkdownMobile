@@ -44,6 +44,10 @@ namespace MauiApp1
             Console.WriteLine(Markdig.Markdown.ToHtml(MarkdownEditor.Text, mdPipeLine)); 
             return Markdig.Markdown.ToHtml(MarkdownEditor.Text , mdPipeLine); 
         }
+        public async void Open(string fileContent)
+        {
+            MarkdownEditor.Text = fileContent;
+        }
         public void OnChange(object sender, TextChangedEventArgs e)
         {
             string result = Read(); 

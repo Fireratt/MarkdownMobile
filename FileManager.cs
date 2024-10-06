@@ -8,6 +8,7 @@ namespace MauiApp1
 	{
         public const string ROOT_DIR = "/data/data/com.Firerat.mauiapp1";
 		public const string DOCUMENT_DIR = "/Document";
+		public const string ANDROID_PREFIX = "/data/data/"; 
         public FileManager()
 		{
 		}
@@ -46,7 +47,23 @@ namespace MauiApp1
 			}
 			return result; 
 		}
-
+		public static async Task<string> ReadRawFile(string fullName)
+		{
+			fullName = ANDROID_PREFIX + fullName; 
+            string result = "";
+            try
+            {
+                using (StreamReader reader = new StreamReader(fullName))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            return result;
+        }
 		public static async void ShareFile(string fileName)
 		{
             string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
