@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Xml.Linq;
+using MauiApp1.DataBase;
 namespace MauiApp1
 {
     public partial class FilePage : ContentPage
     {
         int count = 0;
-
         public ObservableCollection<FileData> YourCollection { get; set; }
-        public void InitializeDocuments()
+        public async void InitializeDocuments()
         {
             try
             {
@@ -33,11 +33,18 @@ namespace MauiApp1
 
             DirectoryInfo documentInfo = new DirectoryInfo(FileManager.ROOT_DIR + FileManager.DOCUMENT_DIR);
             FileInfo[] files = documentInfo.GetFiles("*.md", SearchOption.TopDirectoryOnly);
-            FileData[] fileDatas = new FileData[files.Length];
+            List<FileEntry> outsideFiles = await DatabaseDao.getDataBase().GetEntriesAsync();
+            FileData[] fileDatas = new FileData[files.Length + outsideFiles.Count];
             int cnt = 0; 
             foreach (FileInfo file in files)    // 遍历文件夹中的Files 并且转化为FIleData
             {
-                fileDatas[cnt] = new FileData{ Name = file.Name } ;
+                fileDatas[cnt] = new FileData{ Name = file.Name , Route = FileManager.ROOT_DIR} ;
+                cnt++; 
+            }
+            Console.WriteLine("OutSideFiles number:"+ outsideFiles.Count); 
+            foreach(FileEntry file in outsideFiles)
+            {
+                fileDatas[cnt] = new FileData { Name = file.Name, Route = file.Path };
                 cnt++; 
             }
             if(YourCollection!=null)
@@ -73,6 +80,18 @@ namespace MauiApp1
                 {
                     _name = value;
                     OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+        private string _route; 
+        public string Route
+        {
+            get => _route; set
+            {
+                if(_route != value)
+                {
+                    _route = value;
+                    OnPropertyChanged(nameof(Route));
                 }
             }
         }

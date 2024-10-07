@@ -7,21 +7,27 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MauiApp1
 {
-    public class FileUnit: HorizontalStackLayout
+    public class FileUnit: VerticalStackLayout
     {
+        private HorizontalStackLayout line1;
+        private Label route; 
         private Label name; 
         private Button deleteButton;
         private Button openButton;
         private Button shareButton; 
-        private static void OnPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnTextChanged(BindableObject bindable, object oldValue, object newValue)
         {
-
             var control = (FileUnit)bindable;
             control.name.Text = newValue as string;
         }
+        private static void OnRouteChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var control = (FileUnit)bindable;
+            control.route.Text = newValue as string;
+        }
         // bind the property 
         public static readonly BindableProperty TextProperty =
-        BindableProperty.Create(nameof(Text), typeof(string), typeof(FileUnit), default(string) , propertyChanged:OnPropertyChanged);
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(FileUnit), default(string) , propertyChanged:OnTextChanged);
         public String Text
         {
             get => (string)GetValue(TextProperty); 
@@ -30,7 +36,16 @@ namespace MauiApp1
                 SetValue(TextProperty, value); 
             }
         }
-
+        public static readonly BindableProperty RouteProperty =
+        BindableProperty.Create(nameof(Route), typeof(string), typeof(FileUnit), default(string), propertyChanged: OnRouteChanged);
+        public String Route
+        {
+            get => (string)GetValue(RouteProperty);
+            set
+            {
+                SetValue(RouteProperty, value);
+            }
+        }
         public FileUnit()
         {
             name = new Label
@@ -52,13 +67,24 @@ namespace MauiApp1
             {
                 Text = "分享"
             };
-            Add(name);
-            Add(deleteButton);
-            Add(shareButton); 
+            line1 = new HorizontalStackLayout();
+            line1.Padding = 10;
+            line1.Margin = 24; 
+            line1.Add(name);
+            line1.Add(deleteButton);
+            line1.Add(shareButton); 
             openButton.Clicked += onOpen;   // bind the function for button
             shareButton.Clicked += onShare;
-            deleteButton.Clicked += onDelete; 
-            Add(openButton);
+            deleteButton.Clicked += onDelete;
+            line1.Add(openButton);
+            Console.WriteLine("Route:" + Route); 
+            route = new Label
+            {
+
+                Text = Route
+            };
+            Add(line1); 
+            Add(route); 
             Padding = 10;
             Margin = 24; 
         }

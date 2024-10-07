@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using AndroidX.Core.App;
+using MauiApp1.DataBase;
 
 namespace MauiApp1
 {
@@ -41,8 +42,14 @@ namespace MauiApp1
         {
             using var inputStream = ContentResolver.OpenInputStream(fileUri);
             using var streamReader = new StreamReader(inputStream);
+            RecordFileEntryAndroid(fileUri); 
             return streamReader.ReadToEnd();
-
+        }
+        private void RecordFileEntryAndroid(Android.Net.Uri fileUri)
+        {
+            string[] filenameSplice = fileUri.ToString().Split("/");
+            string filename = filenameSplice[filenameSplice.Length - 1];
+            DatabaseDao.getDataBase().InsertEntriesAsync(new FileEntry {Name=filename , Path = fileUri.ToString() }); 
         }
     }
     

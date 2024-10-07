@@ -48,6 +48,7 @@ namespace MauiApp1
         {
             MarkdownEditor.Text = fileContent;
         }
+
         public void OnChange(object sender, TextChangedEventArgs e)
         {
             string result = Read(); 
