@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using Microsoft.Maui.LifecycleEvents;
 namespace MauiApp1
 {
     public static class MauiProgram
@@ -18,7 +18,6 @@ namespace MauiApp1
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-
             return builder.Build();
         }
     }

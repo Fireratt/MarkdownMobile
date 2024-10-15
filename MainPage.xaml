@@ -23,7 +23,7 @@
         <FlexLayout Grid.Row="0" Padding="10" x:Name="MainButtons" JustifyContent="Start" Direction="Row"
                     Wrap="Wrap">
             <Button Text="Save" Clicked="OnSave" Margin="10,0,10,0"/>
-            <Button Text="Save as" Margin="10,0,10,0"/>
+            <Button Text="Open" Margin="10,0,10,0" Clicked="OnOpen"/>
             <!-- 此处会有剩余自定义按钮生成，详情请参考MainPage的构造函数-->
         </FlexLayout>
 

@@ -38,13 +38,13 @@ namespace MauiApp1
             int cnt = 0; 
             foreach (FileInfo file in files)    // 遍历文件夹中的Files 并且转化为FIleData
             {
-                fileDatas[cnt] = new FileData{ Name = file.Name , Route = FileManager.ROOT_DIR} ;
+                fileDatas[cnt] = new FileData{ Name = file.Name , Route = FileManager.ROOT_DIR, IsOutside = false} ;
                 cnt++; 
             }
             Console.WriteLine("OutSideFiles number:"+ outsideFiles.Count); 
             foreach(FileEntry file in outsideFiles)
             {
-                fileDatas[cnt] = new FileData { Name = file.Name, Route = file.Path };
+                fileDatas[cnt] = new FileData { Name = file.Name, Route = file.Path ,IsOutside = true };
                 cnt++; 
             }
             if(YourCollection!=null)
@@ -71,6 +71,18 @@ namespace MauiApp1
     }
     public class FileData : INotifyPropertyChanged  
     {
+        private bool isOutside; 
+        public bool IsOutside// judge if a file is not in the document file . 
+        {
+            get => isOutside; set
+            {
+                if (isOutside != value)
+                {
+                    isOutside = value;
+                    OnPropertyChanged(nameof(isOutside));
+                }
+            }
+        }
         private string _name; 
         public string Name
         {

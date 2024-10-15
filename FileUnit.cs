@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -46,6 +47,15 @@ namespace MauiApp1
                 SetValue(RouteProperty, value);
             }
         }
+        public static readonly BindableProperty IsOutsideProperty = 
+            BindableProperty.Create(nameof(IsOutside), typeof(bool), typeof(FileUnit), default(bool));
+        public bool IsOutside
+        {
+            get => (bool)GetValue(IsOutsideProperty); set
+            {
+                SetValue(IsOutsideProperty, value);
+            }
+        }
         public FileUnit()
         {
             name = new Label
@@ -68,8 +78,8 @@ namespace MauiApp1
                 Text = "分享"
             };
             line1 = new HorizontalStackLayout();
-            line1.Padding = 10;
-            line1.Margin = 24; 
+            line1.Padding = 0;
+            line1.Margin = 0; 
             line1.Add(name);
             line1.Add(deleteButton);
             line1.Add(shareButton); 
@@ -77,7 +87,6 @@ namespace MauiApp1
             shareButton.Clicked += onShare;
             deleteButton.Clicked += onDelete;
             line1.Add(openButton);
-            Console.WriteLine("Route:" + Route); 
             route = new Label
             {
 
@@ -86,12 +95,19 @@ namespace MauiApp1
             Add(line1); 
             Add(route); 
             Padding = 10;
-            Margin = 24; 
+            Margin = 10; 
         }
         public void onOpen(object sender,EventArgs e)
         {
             var shell = Shell.Current;
-            shell.GoToAsync($"//MainPage?filename={Text}"); 
+            if (!IsOutside)
+            {
+                shell.GoToAsync($"//MainPage?filename={Text}");
+            }
+            else
+            {
+                shell.GoToAsync($"//MainPage?uri={Route}");
+            }
         }
 
         public void onShare(object sender , EventArgs e)
@@ -106,5 +122,6 @@ namespace MauiApp1
             }
 
         }
+        
     }
 }

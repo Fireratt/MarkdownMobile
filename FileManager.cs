@@ -2,6 +2,7 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage; 
 using System.IO;
+using MauiApp1.System;
 namespace MauiApp1
 {
 	public class FileManager
@@ -49,7 +50,7 @@ namespace MauiApp1
 		}
 		public static async Task<string> ReadRawFile(string fullName)
 		{
-			fullName = ANDROID_PREFIX + fullName; 
+			//fullName = ANDROID_PREFIX + fullName; 
             string result = "";
             try
             {
@@ -90,5 +91,22 @@ namespace MauiApp1
 			}
 			return true; 
         }
+		public static async Task<string> SelectFile()
+		{
+			try
+			{
+				var result = await FilePicker.PickAsync(null);
+				if(result == null)
+				{
+					return ""; 
+				}
+				return result.FullPath; 
+			}
+			catch (Exception e)
+			{
+
+			}
+			return ""; 
+		}
     }
 }

@@ -1,14 +1,17 @@
 ﻿
 using Markdig;
-using System.Diagnostics.Metrics;
-using System.Text.Unicode;
-using System.Xml.Linq;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Graphics.Text;
+using Microsoft.Maui.Graphics.Text.Renderer;
+using MauiApp1.Services;
+using MauiApp1.DataBase;
 namespace MauiApp1
 {
     public partial class MainPage : ContentPage , IQueryAttributable
     {
         int count = 0;
-        readonly string[] fastInputs = { "`", "```", "#", "$", "^", "_", "*" };
+        readonly string[] fastInputs = { "`", "```", "#", "$", "^", "_", "*" , "/" , "\\"};
 
         public MainPage()
         {
@@ -83,9 +86,14 @@ namespace MauiApp1
 
             }
         }
-        public void onSaveAs(object sender, TextChangedEventArgs e)
+        public async void OnOpen(object sender, EventArgs e)
         {
-
+            string fullPath = await FileManager.SelectFile(); 
+            if(fullPath != "")
+            {
+                DatabaseDao.getDataBase().InsertEntryByPathAsync(fullPath); 
+                Open(await FileManager.ReadRawFile(fullPath));  
+            }
         }
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
@@ -93,6 +101,16 @@ namespace MauiApp1
             {
                 MarkdownEditor.Text = await FileManager.ReadFile(filename as string);
 
+            }else if(query.TryGetValue("uri" , out object uri))
+            {
+                PermissionStatus status = await Permissions.RequestAsync<Permissions.StorageRead>();
+                if (status.Equals(PermissionStatus.Granted) || status.Equals(PermissionStatus.Restricted))
+                {
+                    MarkdownEditor.Text = UriService.ReadUriData(uri as string);
+                }
+                else {
+                    await DisplayAlert("无法打开文件", "因权限不足，无法打开对应文件", "确认");
+                }
             }
         }
     }
