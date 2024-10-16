@@ -10,7 +10,6 @@ namespace MauiApp1
 {
     public partial class MainPage : ContentPage , IQueryAttributable
     {
-        int count = 0;
         readonly string[] fastInputs = { "`", "```", "#", "$", "^", "_", "*" , "/" , "\\"};
 
         public MainPage()
@@ -47,7 +46,7 @@ namespace MauiApp1
             Console.WriteLine(Markdig.Markdown.ToHtml(MarkdownEditor.Text, mdPipeLine)); 
             return Markdig.Markdown.ToHtml(MarkdownEditor.Text , mdPipeLine); 
         }
-        public async void Open(string fileContent)
+        public void Open(string fileContent)
         {
             MarkdownEditor.Text = fileContent;
         }
@@ -73,17 +72,16 @@ namespace MauiApp1
             Console.WriteLine(fileName); 
             if(fileName == "" || fileName == null)
             {
-                this.DisplayAlert("", "save stopped due to use input error", "OK");
+                await this.DisplayAlert("", "save stopped due to use input error", "OK");
                 return; 
             }
-            if (await FileManager.SaveFile(MarkdownEditor.Text , fileName))
+            if (FileManager.SaveFile(MarkdownEditor.Text , fileName))
             {
-                this.DisplayAlert("", "save success" , "OK");
+                await this.DisplayAlert("", "save success" , "OK");
             }
             else
             {
-                this.DisplayAlert("", "save stopped due to unknowned problem", "OK");
-
+                await this.DisplayAlert("", "save stopped due to unknowned problem", "OK");
             }
         }
         public async void OnOpen(object sender, EventArgs e)
@@ -91,7 +89,7 @@ namespace MauiApp1
             string fullPath = await FileManager.SelectFile(); 
             if(fullPath != "")
             {
-                DatabaseDao.getDataBase().InsertEntryByPathAsync(fullPath); 
+                await DatabaseDao.getDataBase().InsertEntryByPathAsync(fullPath); 
                 Open(await FileManager.ReadRawFile(fullPath));  
             }
         }
@@ -99,14 +97,16 @@ namespace MauiApp1
         {
             if (query.TryGetValue("filename", out object filename)) // receive the filename from filepage
             {
-                MarkdownEditor.Text = await FileManager.ReadFile(filename as string);
+                string param = filename as string ?? ""; 
+                MarkdownEditor.Text = await FileManager.ReadFile(param);
 
             }else if(query.TryGetValue("uri" , out object uri))
             {
                 PermissionStatus status = await Permissions.RequestAsync<Permissions.StorageRead>();
                 if (status.Equals(PermissionStatus.Granted) || status.Equals(PermissionStatus.Restricted))
                 {
-                    MarkdownEditor.Text = UriService.ReadUriData(uri as string);
+                    string param = uri as string ?? ""; 
+                    MarkdownEditor.Text = UriService.ReadUriData(param);
                 }
                 else {
                     await DisplayAlert("无法打开文件", "因权限不足，无法打开对应文件", "确认");

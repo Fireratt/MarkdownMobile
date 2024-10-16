@@ -21,48 +21,61 @@ namespace MauiApp1
         protected override async void OnNewIntent(Intent? intent)
         {
             base.OnNewIntent(intent);
-            if (intent.Action == Android.Content.Intent.ActionSend)
+            if (intent!=null && intent.Action == Android.Content.Intent.ActionSend)
             {
                 var fileUri = intent.GetParcelableExtra(Android.Content.Intent.ExtraStream) as Android.Net.Uri;
                 if (fileUri != null)
                 {
                     await Shell.Current.GoToAsync("//MainPage");
-                    (Shell.Current.CurrentPage as MainPage).Open(ReadFileAndroid(fileUri));
-                    //Shell.Current.GoToAsync("//MainPage").ContinueWith((Task task) =>
-                    //{
-                    //    (Shell.Current.CurrentPage as MainPage).Open(ReadFileAndroid(fileUri));
-                    //});
+                    (Shell.Current.CurrentPage as MainPage)?.Open(await ReadFileAndroid(fileUri));
                 }
             }
-            else if (intent.Action == Android.Content.Intent.ActionView)
+            else if (intent!=null && intent.Action == Android.Content.Intent.ActionView)
             {
                 var fileUri = intent.Data;
                 if (fileUri != null)
                 {
                     await Shell.Current.GoToAsync("//MainPage");
-                    (Shell.Current.CurrentPage as MainPage).Open(ReadFileAndroid(fileUri));
+                    (Shell.Current.CurrentPage as MainPage)?.Open(await ReadFileAndroid(fileUri));
                 }
             }
         }
-        public string ReadFileAndroid(Android.Net.Uri fileUri)
+        public async Task<string> ReadFileAndroid(Android.Net.Uri fileUri)
         {
-            using var inputStream = ContentResolver.OpenInputStream(fileUri);
+            using var inputStream = ContentResolver?.OpenInputStream(fileUri);
+            if(inputStream == null)
+            {
+                throw new Exception("Error Occur When Open Uri"); 
+            }
             using var streamReader = new StreamReader(inputStream);
-            RecordFileEntryAndroid(fileUri); 
+            await RecordFileEntryAndroid(fileUri); 
             return streamReader.ReadToEnd();
         }
         // the static version for other class to call 
         public string ReadFileAndroid(string uri)
         {
             Android.Net.Uri readingUri = Android.Net.Uri.Parse(uri);
-            using var inputStream = ContentResolver.OpenInputStream(readingUri);
-            using var streamReader = new StreamReader(inputStream);
-            return streamReader.ReadToEnd();
+            if(readingUri == null)
+            {
+                throw new Exception("Error When Read File From Android System");
+            }
+            using var inputStream = ContentResolver?.OpenInputStream(readingUri);
+            if (inputStream != null)
+            {
+                using var streamReader = new StreamReader(inputStream);
+                return streamReader.ReadToEnd();
+            }
+            throw new Exception("Error When Read File From Android System");
         }
-        private void RecordFileEntryAndroid(Android.Net.Uri fileUri)
+        private async Task RecordFileEntryAndroid(Android.Net.Uri fileUri)
         {
-            string filename = StringUtils.GetFileName(fileUri.ToString()); 
-            DatabaseDao.getDataBase().InsertEntriesAsync(new FileEntry {Name=filename , Path = fileUri.ToString() }); 
+            if(fileUri.ToString() == null)
+            {
+                return;
+            }
+            var filePath = fileUri.ToString()??"";  // check if it is empty ; 
+            string filename = StringUtils.GetFileName(filePath); 
+            await DatabaseDao.getDataBase().InsertEntriesAsync(new FileEntry {Name=filename , Path = filePath }); 
         }
     }
     

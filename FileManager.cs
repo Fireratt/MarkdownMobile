@@ -13,7 +13,7 @@ namespace MauiApp1
         public FileManager()
 		{
 		}
-		public static async Task<bool> SaveFile(string content , string fileName)
+		public static bool SaveFile(string content , string fileName)
 		{
             if (!Directory.Exists(ROOT_DIR + DOCUMENT_DIR))
             {
@@ -39,7 +39,7 @@ namespace MauiApp1
 			{ 
 				using (StreamReader reader = new StreamReader(fullname))
 				{
-					result = reader.ReadToEnd(); 
+					result = await reader.ReadToEndAsync(); 
 				}
 			}
 			catch(Exception e)
@@ -56,7 +56,7 @@ namespace MauiApp1
             {
                 using (StreamReader reader = new StreamReader(fullName))
                 {
-                    result = reader.ReadToEnd();
+                    result = await reader.ReadToEndAsync();
                 }
             }
             catch (Exception e)
@@ -104,7 +104,7 @@ namespace MauiApp1
 			}
 			catch (Exception e)
 			{
-
+				Console.WriteLine(e.Message); 
 			}
 			return ""; 
 		}

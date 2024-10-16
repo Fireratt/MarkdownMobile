@@ -12,8 +12,7 @@ namespace MauiApp1
 {
     public partial class FilePage : ContentPage
     {
-        int count = 0;
-        public ObservableCollection<FileData> YourCollection { get; set; }
+        public required ObservableCollection<FileData> YourCollection { get; set; }
         public async void InitializeDocuments()
         {
             try
@@ -27,7 +26,7 @@ namespace MauiApp1
             {
                 Console.WriteLine("Current Work Route:" + Directory.GetCurrentDirectory());
                 Console.WriteLine("Error:" + err.ToString()); 
-                this.DisplayAlert("Error",err.ToString() , "OK"); 
+                await this.DisplayAlert("Error",err.ToString() , "OK"); 
                 return;
             }
 
@@ -69,7 +68,7 @@ namespace MauiApp1
             InitializeDocuments(); 
         }
     }
-    public class FileData : INotifyPropertyChanged  
+    public class FileData
     {
         private bool isOutside; 
         public bool IsOutside// judge if a file is not in the document file . 
@@ -79,11 +78,11 @@ namespace MauiApp1
                 if (isOutside != value)
                 {
                     isOutside = value;
-                    OnPropertyChanged(nameof(isOutside));
+                    //OnPropertyChanged(nameof(isOutside));
                 }
             }
         }
-        private string _name; 
+        private string _name = ""; 
         public string Name
         {
             get => _name; set
@@ -91,11 +90,11 @@ namespace MauiApp1
                 if (_name != value)
                 {
                     _name = value;
-                    OnPropertyChanged(nameof(Name));
+                    //OnPropertyChanged(nameof(Name));
                 }
             }
         }
-        private string _route; 
+        private string _route = ""; 
         public string Route
         {
             get => _route; set
@@ -103,15 +102,15 @@ namespace MauiApp1
                 if(_route != value)
                 {
                     _route = value;
-                    OnPropertyChanged(nameof(Route));
+                    //OnPropertyChanged(nameof(Route));
                 }
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged ;
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //protected virtual void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
     }
 }
