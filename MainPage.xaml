@@ -24,6 +24,7 @@
                     Wrap="Wrap">
             <Button Text="Save" Clicked="OnSave" Margin="10,0,10,0"/>
             <Button Text="Open" Margin="10,0,10,0" Clicked="OnOpen"/>
+            <Button Text="Export" Margin="10,0,10,0" Clicked="OnExport"/>
             <!-- 此处会有剩余自定义按钮生成，详情请参考MainPage的构造函数-->
         </FlexLayout>
 

@@ -114,9 +114,9 @@ namespace MauiApp1
         {
             FileManager.ShareFile(Text); 
         }
-        public void onDelete(object sender, EventArgs e)
+        public async void onDelete(object sender, EventArgs e)
         {
-            if (FileManager.DeleteFile(Text))
+            if (await FileManager.DeleteFile(Text))
             {
                 this.IsVisible = false; 
             }

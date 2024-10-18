@@ -15,6 +15,11 @@ namespace MauiApp1
         public required ObservableCollection<FileData> YourCollection { get; set; }
         public async void InitializeDocuments()
         {
+            if (!await FileManager.RequestReadAndWrite())
+            {
+                Console.WriteLine("Error:" + "Cant Write the Memory");
+                return; 
+            }
             try
             {
                 if (!Directory.Exists(FileManager.ROOT_DIR + FileManager.DOCUMENT_DIR))
@@ -61,7 +66,7 @@ namespace MauiApp1
         public FilePage()
         {
             InitializeComponent();
-            InitializeDocuments(); 
+            InitializeDocuments();
         }
         public void OnRefresh(object sender, EventArgs e)
         {

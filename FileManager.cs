@@ -7,7 +7,7 @@ namespace MauiApp1
 {
 	public class FileManager
 	{
-        public const string ROOT_DIR = "/data/data/com.Firerat.mauiapp1";
+        public const string ROOT_DIR = "/data/data/com.Firerat.MarkdownMobile";
 		public const string DOCUMENT_DIR = "/Document";
 		public const string ANDROID_PREFIX = "/data/data/"; 
         public FileManager()
@@ -33,6 +33,10 @@ namespace MauiApp1
 		}
 		public static async Task<string> ReadFile(string fileName)
 		{
+			if (await RequestReadAndWrite())
+			{
+				return "";
+			}
 			string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
 			string result = ""; 
 			try 
@@ -50,7 +54,11 @@ namespace MauiApp1
 		}
 		public static async Task<string> ReadRawFile(string fullName)
 		{
-			//fullName = ANDROID_PREFIX + fullName; 
+            if (await RequestReadAndWrite())
+            {
+                return "";
+            }
+            //fullName = ANDROID_PREFIX + fullName; 
             string result = "";
             try
             {
@@ -65,8 +73,19 @@ namespace MauiApp1
             }
             return result;
         }
-		public static async void ShareFile(string fileName)
+		public static async Task<bool> RequestReadAndWrite()
 		{
+            PermissionStatus status = await Permissions.RequestAsync<Permissions.StorageRead>();
+            PermissionStatus status2 = await Permissions.RequestAsync<Permissions.StorageWrite>();
+			return status.Equals(PermissionStatus.Granted) || status.Equals(PermissionStatus.Restricted) &&
+				status2.Equals(PermissionStatus.Granted) || status2.Equals(PermissionStatus.Restricted); 
+        }
+        public static async void ShareFile(string fileName)
+		{
+            if (await RequestReadAndWrite())
+            {
+                return ;
+            }
             string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
 			await Share.Default.RequestAsync(new ShareFileRequest
 			{
@@ -76,8 +95,12 @@ namespace MauiApp1
 
         }
 
-		public static bool DeleteFile(string fileName)
+		public static async Task<bool> DeleteFile(string fileName)
 		{
+            if (await RequestReadAndWrite())
+            {
+                return false;
+            }
             string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
 			try
 			{
@@ -95,7 +118,11 @@ namespace MauiApp1
 		{
 			try
 			{
-				var result = await FilePicker.PickAsync(null);
+                if (await RequestReadAndWrite())
+                {
+                    return "";
+                }
+                var result = await FilePicker.PickAsync(null);
 				if(result == null)
 				{
 					return ""; 

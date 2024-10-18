@@ -6,6 +6,7 @@ using Microsoft.Maui.Graphics.Text;
 using Microsoft.Maui.Graphics.Text.Renderer;
 using MauiApp1.Services;
 using MauiApp1.DataBase;
+using MarkdownMobile.Utils;
 namespace MauiApp1
 {
     public partial class MainPage : ContentPage , IQueryAttributable
@@ -111,6 +112,19 @@ namespace MauiApp1
                 else {
                     await DisplayAlert("无法打开文件", "因权限不足，无法打开对应文件", "确认");
                 }
+            }
+        }
+
+        public async void OnExport(object sender, EventArgs e)
+        {
+            try
+            {
+                string pdfRoute = PdfUtils.toPdf(MarkdownView.Html);
+                FileManager.ShareFile(pdfRoute); 
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message); 
             }
         }
     }
