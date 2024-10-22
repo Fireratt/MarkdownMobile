@@ -75,12 +75,14 @@
 	  <Compile Remove="Component1.Designer.cs" />
 	  <Compile Remove="StringUtils.cs" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<PackageReference Include="AppSoftware.KatexSharpRunner" Version="0.1.0" />
+		<PackageReference Include="Aspose.HTML" Version="24.9.0" />
 		<PackageReference Include="Aspose.PDF" Version="24.10.0" />
 		<PackageReference Include="Jint" Version="2.11.58" />
 		<PackageReference Include="Markdig" Version="0.37.0" />
+		<PackageReference Include="Microsoft.JSInterop" Version="8.0.10" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -108,6 +110,10 @@
 	  <MauiXaml Update="FilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="JScripts\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionMauiApp1HideInfoBar="True" /></VisualStudio></ProjectExtensions>

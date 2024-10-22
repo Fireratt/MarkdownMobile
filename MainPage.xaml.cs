@@ -7,6 +7,7 @@ using Microsoft.Maui.Graphics.Text.Renderer;
 using MauiApp1.Services;
 using MauiApp1.DataBase;
 using MarkdownMobile.Utils;
+using Aspose.Pdf.Drawing;
 namespace MauiApp1
 {
     public partial class MainPage : ContentPage , IQueryAttributable
@@ -52,21 +53,23 @@ namespace MauiApp1
             MarkdownEditor.Text = fileContent;
         }
 
-        public void OnChange(object sender, TextChangedEventArgs e)
+        public async void OnChange(object sender, TextChangedEventArgs e)
         {
             string result = Read(); 
             Console.WriteLine(result);
-            string header = "    <meta charset=\"UTF-8\">" + 
-    "<meta name = \"viewport\" content = \"width=device-width, initial-scale=1.0\">\n" + 
-    "<link rel = \"stylesheet\" href = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css\">\n" + 
-    "<script defer src = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js\"></script>\n" + 
-    "<script defer src = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js\"" + 
-        "onload = \"renderMathInElement(document.body);\"></script>" 
+            string customScript = await ScriptsUtils.loadScripts("pdf.js");
+            Console.WriteLine(customScript);
+            string header = "    <meta charset=\"UTF-8\">" +
+    "<meta name = \"viewport\" content = \"width=device-width, initial-scale=1.0\">\n" +
+    "<link rel = \"stylesheet\" href = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css\">\n" +
+    "<script defer src = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js\"></script>\n" +
+    "<script defer src = \"https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js\"" +
+        "onload = \"renderMathInElement(document.body);\"></script>" +
+            $"<script> {customScript} </script>" +
+            "<script src = \"https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\"></script>"
             ;
             MarkdownView.Html = $"<!DOCTYPE html><html><head>{header}</head><body><div class=\"results\">{result}</div></body></html>";
-
         }
-
         public async void OnSave(object sender, EventArgs e)
         {
             string fileName = await this.DisplayPromptAsync("SaveFile", "请输入保存文件名");
@@ -119,8 +122,8 @@ namespace MauiApp1
         {
             try
             {
-                string pdfRoute = PdfUtils.toPdf(MarkdownView.Html);
-                FileManager.ShareFile(pdfRoute); 
+                string pdfRoute = await PdfUtils.ToPdf(MarkdownWebView);
+                FileManager.ShareRawFile(FileManager.ROOT_DIR + pdfRoute); 
             }
             catch (Exception err)
             {

@@ -15,28 +15,29 @@ namespace MauiApp1
 		}
 		public static bool SaveFile(string content , string fileName)
 		{
-            if (!Directory.Exists(ROOT_DIR + DOCUMENT_DIR))
+			return SaveFile(content, DOCUMENT_DIR, fileName + ".md"); 
+		}
+		// 将Content保存到根目录下自定义的文件夹中的指定文件名中去
+		public static bool SaveFile(string content , string dir , string fileName)
+		{
+            if (!Directory.Exists(ROOT_DIR + dir))
             {
-                Directory.CreateDirectory(ROOT_DIR + DOCUMENT_DIR);   // 若存放所有markdown文档的文件夹不存在，则先创建一个。
+                Directory.CreateDirectory(ROOT_DIR + dir);   // 若存放文件夹不存在，则先创建一个。
             }
             if (fileName != null && fileName != "")
-			{
-				var filePath = ROOT_DIR + DOCUMENT_DIR + "/" +  fileName + ".md"; 
-				Console.WriteLine(filePath); 
-				File.WriteAllText(filePath, content);
-				return true; 
+            {
+                var filePath = ROOT_DIR + dir + "/" + fileName;
+                Console.WriteLine(filePath);
+                File.WriteAllText(filePath, content);
+                return true;
             }
-			else
-			{
-				return false; 
+            else
+            {
+                return false;
             }
-		}
+        }
 		public static async Task<string> ReadFile(string fileName)
 		{
-			if (await RequestReadAndWrite())
-			{
-				return "";
-			}
 			string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
 			string result = ""; 
 			try 
@@ -54,10 +55,6 @@ namespace MauiApp1
 		}
 		public static async Task<string> ReadRawFile(string fullName)
 		{
-            if (await RequestReadAndWrite())
-            {
-                return "";
-            }
             //fullName = ANDROID_PREFIX + fullName; 
             string result = "";
             try
@@ -82,25 +79,21 @@ namespace MauiApp1
         }
         public static async void ShareFile(string fileName)
 		{
-            if (await RequestReadAndWrite())
-            {
-                return ;
-            }
             string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
-			await Share.Default.RequestAsync(new ShareFileRequest
-			{
-				File = new ShareFile(fullname) , 
-				Title = "Share Your markdown file" 
-			}); 
+
+			await ShareRawFile(fullname); 
 
         }
-
+		public static async Task ShareRawFile(string fullname)
+		{
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                File = new ShareFile(fullname),
+                Title = "Share Your markdown file"
+            });
+        }
 		public static async Task<bool> DeleteFile(string fileName)
 		{
-            if (await RequestReadAndWrite())
-            {
-                return false;
-            }
             string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
 			try
 			{
@@ -118,10 +111,6 @@ namespace MauiApp1
 		{
 			try
 			{
-                if (await RequestReadAndWrite())
-                {
-                    return "";
-                }
                 var result = await FilePicker.PickAsync(null);
 				if(result == null)
 				{

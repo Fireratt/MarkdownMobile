@@ -4,26 +4,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Aspose.Pdf;
+using Microsoft.JSInterop; 
 using MauiApp1;
+using System.Runtime.Serialization;
+using Microsoft.JSInterop.Implementation;
 namespace MarkdownMobile.Utils
 {
     public class PdfUtils
     {
+        public const string PDF_SCRIPT = "getPdfString()"; 
         public const string PDF_DIR = "/tem/pdf";
         public const string PDF_NAME = "/tem_pdf.pdf"; 
-        public static string toPdf(string html)
+        public static async Task<string> ToPdf(WebView webview)
         {
-            HtmlLoadOptions options = new HtmlLoadOptions();
             try
             {
-                Document pdfDocument = new Document(StringToStream(html), options);
-                pdfDocument.Save(FileManager.ROOT_DIR + PDF_DIR + PDF_NAME);
-                return FileManager.ROOT_DIR + PDF_DIR + PDF_NAME; 
+                var result = await webview.EvaluateJavaScriptAsync(PDF_SCRIPT);
+                Console.WriteLine(result);
+                if(result == "{}")
+                {
+                    return ""; 
+                }
+                FileManager.SaveFile(result, PDF_DIR, PDF_NAME); 
+                return PDF_DIR + PDF_NAME; 
             }
             catch(Exception e)
             {
+                Console.WriteLine("Error Occurred When Processing the PDF"); 
                 Console.Write(e.Message); 
+                Console.WriteLine(e.StackTrace) ;
                 return ""; 
             }
         }

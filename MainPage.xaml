@@ -14,7 +14,7 @@
             <RowDefinition Height="460"/>
             <!-- WebView with fixed height -->
         </Grid.RowDefinitions>
-        <WebView Grid.Row="2" VerticalOptions="FillAndExpand" >
+        <WebView Grid.Row="2" VerticalOptions="FillAndExpand" x:Name="MarkdownWebView" >
             <WebView.Source>
                 <HtmlWebViewSource x:Name="MarkdownView">
                 </HtmlWebViewSource>
