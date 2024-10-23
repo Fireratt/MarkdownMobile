@@ -13,8 +13,9 @@ async function convertHtmlToPdfString() {
             p.id = "PDF_Title";
             p.innerHTML = "正在转化PDF";
             document.body.appendChild(p); 
-            let pdfString = await worker.output('datauristring');
-            resolve(pdfString);
+            let pdfBlob = await worker.output('dataurlstring');
+            
+            resolve(pdfBlob);
         }
         catch (e) {
             reject(e); 
@@ -28,6 +29,7 @@ function getPdfString() {
         if (node) {
             document.body.removeChild(node);
         }
+        console.log(pdfString); 
         window.globalPdf = false; 
         return pdfString; 
     }
@@ -40,3 +42,16 @@ function getPdfString() {
     })
     return "{}"; 
 }
+
+async function blob2base64(blob) {
+    let reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onload = function (e) {
+        return reader.result;
+    };
+}
+function arrayBufferToString(arrayBuffer) {
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const decoder = new TextDecoder();
+    return decoder.decode(uint8Array);
+}  

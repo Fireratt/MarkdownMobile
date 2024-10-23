@@ -19,13 +19,18 @@ namespace MarkdownMobile.Utils
         {
             try
             {
+                // encoded in base64 
                 var result = await webview.EvaluateJavaScriptAsync(PDF_SCRIPT);
-                Console.WriteLine(result);
+                // need to parse the base 64 ; first need to get the last of the base64 string
+                string[] base64Array = result.Split(",");
+                string base64String = base64Array[base64Array.Length - 1];
+                byte[] content = Convert.FromBase64String(base64String); 
+                //Console.WriteLine(result);
                 if(result == "{}")
                 {
                     return ""; 
                 }
-                FileManager.SaveFile(result, PDF_DIR, PDF_NAME); 
+                FileManager.SaveFile(content, PDF_DIR, PDF_NAME); 
                 return PDF_DIR + PDF_NAME; 
             }
             catch(Exception e)

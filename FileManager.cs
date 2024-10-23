@@ -36,6 +36,24 @@ namespace MauiApp1
                 return false;
             }
         }
+		public static bool SaveFile(byte[] content , string dir , string fileName)
+		{
+            if (!Directory.Exists(ROOT_DIR + dir))
+            {
+                Directory.CreateDirectory(ROOT_DIR + dir);   // 若存放文件夹不存在，则先创建一个。
+            }
+            if (fileName != null && fileName != "")
+            {
+                var filePath = ROOT_DIR + dir + "/" + fileName;
+                Console.WriteLine(filePath);
+                File.WriteAllBytes(filePath, content);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 		public static async Task<string> ReadFile(string fileName)
 		{
 			string fullname = ROOT_DIR + DOCUMENT_DIR + "/" + fileName;
