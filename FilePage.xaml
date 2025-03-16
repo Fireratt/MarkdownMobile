@@ -8,7 +8,7 @@
 			<CollectionView ItemsSource="{Binding YourCollection}" x:Name="FileCollection">
 				<CollectionView.ItemTemplate>
 					<DataTemplate>
-						<local:FileUnit Text="{Binding Name}"/>
+						<local:FileUnit Text="{Binding Name}" Route="{Binding Route}" IsOutside="{Binding IsOutside}"/>
 					</DataTemplate>
 				</CollectionView.ItemTemplate>
 			</CollectionView>

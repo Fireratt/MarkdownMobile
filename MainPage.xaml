@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MauiApp1"
-             x:Class="MauiApp1.MainPage">
+             x:Class="MauiApp1.MainPage"
+             x:Name="EditorPage">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -13,16 +14,19 @@
             <RowDefinition Height="460"/>
             <!-- WebView with fixed height -->
         </Grid.RowDefinitions>
-        <WebView Grid.Row="2" VerticalOptions="FillAndExpand" >
+        <WebView Grid.Row="2" VerticalOptions="FillAndExpand" x:Name="MarkdownWebView" >
             <WebView.Source>
                 <HtmlWebViewSource x:Name="MarkdownView">
                 </HtmlWebViewSource>
             </WebView.Source>
         </WebView>
-        <HorizontalStackLayout Grid.Row="0" Padding="20" Spacing="15" >
-            <Button Text="Save" Clicked="OnSave"/>
-            <Button Text="Save as"/>
-        </HorizontalStackLayout>
+        <FlexLayout Grid.Row="0" Padding="10" x:Name="MainButtons" JustifyContent="Start" Direction="Row"
+                    Wrap="Wrap">
+            <Button Text="Save" Clicked="OnSave" Margin="10,0,10,0"/>
+            <Button Text="Open" Margin="10,0,10,0" Clicked="OnOpen"/>
+            <Button Text="Export" Margin="10,0,10,0" Clicked="OnExport"/>
+            <!-- 此处会有剩余自定义按钮生成，详情请参考MainPage的构造函数-->
+        </FlexLayout>
 
         <Editor x:Name="MarkdownEditor" TextChanged="OnChange" Grid.Row="1" />
 

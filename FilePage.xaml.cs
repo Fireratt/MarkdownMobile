@@ -7,14 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Xml.Linq;
+using MauiApp1.DataBase;
 namespace MauiApp1
 {
     public partial class FilePage : ContentPage
     {
-        int count = 0;
-
-        public ObservableCollection<FileData> YourCollection { get; set; }
-        public void InitializeDocuments()
+        public required ObservableCollection<FileData> YourCollection { get; set; }
+        public async void InitializeDocuments()
         {
             try
             {
@@ -27,17 +26,24 @@ namespace MauiApp1
             {
                 Console.WriteLine("Current Work Route:" + Directory.GetCurrentDirectory());
                 Console.WriteLine("Error:" + err.ToString()); 
-                this.DisplayAlert("Error",err.ToString() , "OK"); 
+                await this.DisplayAlert("Error",err.ToString() , "OK"); 
                 return;
             }
 
             DirectoryInfo documentInfo = new DirectoryInfo(FileManager.ROOT_DIR + FileManager.DOCUMENT_DIR);
             FileInfo[] files = documentInfo.GetFiles("*.md", SearchOption.TopDirectoryOnly);
-            FileData[] fileDatas = new FileData[files.Length];
+            List<FileEntry> outsideFiles = await DatabaseDao.getDataBase().GetEntriesAsync();
+            FileData[] fileDatas = new FileData[files.Length + outsideFiles.Count];
             int cnt = 0; 
             foreach (FileInfo file in files)    // 遍历文件夹中的Files 并且转化为FIleData
             {
-                fileDatas[cnt] = new FileData{ Name = file.Name } ;
+                fileDatas[cnt] = new FileData{ Name = file.Name , Route = FileManager.ROOT_DIR, IsOutside = false} ;
+                cnt++; 
+            }
+            Console.WriteLine("OutSideFiles number:"+ outsideFiles.Count); 
+            foreach(FileEntry file in outsideFiles)
+            {
+                fileDatas[cnt] = new FileData { Name = file.Name, Route = file.Path ,IsOutside = true };
                 cnt++; 
             }
             if(YourCollection!=null)
@@ -55,16 +61,28 @@ namespace MauiApp1
         public FilePage()
         {
             InitializeComponent();
-            InitializeDocuments(); 
+            InitializeDocuments();
         }
         public void OnRefresh(object sender, EventArgs e)
         {
             InitializeDocuments(); 
         }
     }
-    public class FileData : INotifyPropertyChanged  
+    public class FileData
     {
-        private string _name; 
+        private bool isOutside; 
+        public bool IsOutside// judge if a file is not in the document file . 
+        {
+            get => isOutside; set
+            {
+                if (isOutside != value)
+                {
+                    isOutside = value;
+                    //OnPropertyChanged(nameof(isOutside));
+                }
+            }
+        }
+        private string _name = ""; 
         public string Name
         {
             get => _name; set
@@ -72,15 +90,27 @@ namespace MauiApp1
                 if (_name != value)
                 {
                     _name = value;
-                    OnPropertyChanged(nameof(Name));
+                    //OnPropertyChanged(nameof(Name));
                 }
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
+        private string _route = ""; 
+        public string Route
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _route; set
+            {
+                if(_route != value)
+                {
+                    _route = value;
+                    //OnPropertyChanged(nameof(Route));
+                }
+            }
         }
+        //public event PropertyChangedEventHandler PropertyChanged ;
+
+        //protected virtual void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
     }
 }
